@@ -1,7 +1,7 @@
 # Convoluational Neural Network
 CNN Final Project for CI II at UM Columbia
 
-# Basic Usage
+### Basic Usage
 ```
 python3 CNNFinalProject [dir]
 ```
