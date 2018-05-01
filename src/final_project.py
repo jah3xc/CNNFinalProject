@@ -19,6 +19,7 @@ def final_project():
     pooling = args["pooling_size"]
     layers = args["num_layers"]
     folds = args["num_folds"]
+    epochs = args["num_epochs"]
 
     cnn = CNN(
         image_location,
@@ -26,4 +27,8 @@ def final_project():
         num_layers=layers,
         pooling_size=pooling,
         kernel_size=kernel,
-        num_folds=folds)
+        num_folds=folds,
+        num_epochs=epochs)
+
+    cnn.compile()
+    cnn.fit()

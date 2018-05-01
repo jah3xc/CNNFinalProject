@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 import logging
 from pathlib import Path
-from src.ConvolutionalNeuralNetwork import POOLING_SIZE, KERNEL_SIZE, NUM_FILTERS, NUM_LAYERS, NUM_FOLDS
+from src.ConvolutionalNeuralNetwork import POOLING_SIZE, KERNEL_SIZE, NUM_FILTERS, NUM_LAYERS, NUM_FOLDS, NUM_EPOCHS
 
 
 def setup():
@@ -37,9 +37,11 @@ def setup():
         help="Number of folds for cross validation",
         default=NUM_FOLDS)
     parser.add_argument(
+        "--num_epochs", type=int, default=NUM_EPOCHS, help="Number of epochs")
+    parser.add_argument(
         "--log",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        default="CRITICAL",
+        default="WARNING",
         help="Logging level")
     args = vars(parser.parse_args())
 
