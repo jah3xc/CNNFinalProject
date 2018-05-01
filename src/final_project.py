@@ -1,7 +1,7 @@
+import os
 from src.setup import setup
 from src.ConvolutionalNeuralNetwork import ConvolutionalNeuralNetwork as CNN
 import pathlib
-import os
 import logging
 
 

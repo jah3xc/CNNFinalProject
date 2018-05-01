@@ -48,6 +48,7 @@ class ConvolutionalNeuralNetwork:
         self.img_dimension = img_dimension
         self.num_classes = 0
         self.folds = {}
+        self.cross_validation_accuracy = {}
         self.model = None
 
         # param chck
@@ -69,7 +70,7 @@ class ConvolutionalNeuralNetwork:
             # check that we have a valid extension
             if str(f).split(".")[-1] not in ["png", "tif", "jpg"
                                              ] or not Path(f).is_file():
-                logging.warning(
+                logging.info(
                     "Found file {}, which is not an image. Skipping..".format(
                         str(f)))
                 continue
@@ -123,7 +124,10 @@ class ConvolutionalNeuralNetwork:
         output = Dense(self.num_classes, activation="softmax")
         self.model.add(output)
         # compile model
-        self.model.compile(optimizer='adam', loss='categorical_crossentropy')
+        self.model.compile(
+            optimizer='adam',
+            loss='categorical_crossentropy',
+            metrics=["accuracy"])
 
     def fit(self):
         """
@@ -157,6 +161,7 @@ class ConvolutionalNeuralNetwork:
                 return
 
             logging.debug("Found {} training images!".format(len(data)))
+
             # fit the model
             try:
                 self.model.fit(data, classes, epochs=self.num_epochs)
@@ -164,6 +169,27 @@ class ConvolutionalNeuralNetwork:
                 logging.critical("Could not train! An error occurred")
                 logging.debug(err)
                 return
+
+            # test the model
+            test_data, test_classes = self.generate_train_data(
+                self.folds[fold])
+            # sanity check
+            if len(test_data) != len(test_classes):
+                logging.critical(
+                    "Testing Data and Labels have different lengths ({} vs {})!".
+                    format(len(test_data), len(test_classes)))
+                return
+            # eval
+            try:
+                loss, accuracy = self.model.evaluate(test_data, test_classes)
+                self.cross_validation_accuracy[fold] = accuracy
+            except Exception as err:
+                logging.critical("Could not test! An error occurred")
+                logging.debug(err)
+                return
+
+            print("Fold {} Accuracy: {}".format(
+                fold, self.cross_validation_accuracy[fold]))
 
     def get_class_labels(self, array, invalid_images):
         """
@@ -215,7 +241,7 @@ class ConvolutionalNeuralNetwork:
             img = cv2.imread(str(fname), cv2.IMREAD_COLOR)
             if img.shape != (self.img_dimension, self.img_dimension, 3):
 
-                logging.warning("Found image that was not {}x{}: {}".format(
+                logging.info("Found image that was not {}x{}: {}".format(
                     self.img_dimension, self.img_dimension, fname))
                 invalid_images.append(i)
             else:
