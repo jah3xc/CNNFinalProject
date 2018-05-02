@@ -49,6 +49,7 @@ class ConvolutionalNeuralNetwork:
         self.num_classes = 0
         self.folds = {}
         self.cross_validation_accuracy = {}
+        self.average_accuracy = 0.
         self.model = None
 
         # param chck
@@ -190,6 +191,12 @@ class ConvolutionalNeuralNetwork:
 
             print("Fold {} Accuracy: {}".format(
                 fold, self.cross_validation_accuracy[fold]))
+
+        total = 0.
+        for score in self.cross_validation_accuracy:
+            total += score
+        self.average_accuracy = total / self.num_folds
+        print("Average Accuracy: {}".format(self.average_accuracy))
 
     def get_class_labels(self, array, invalid_images):
         """
