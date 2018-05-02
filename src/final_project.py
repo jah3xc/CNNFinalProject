@@ -20,7 +20,9 @@ def final_project():
     layers = args["num_layers"]
     folds = args["num_folds"]
     epochs = args["num_epochs"]
+    img_dim = args["img_dimension"]
 
+    # create CNN
     cnn = CNN(
         image_location,
         num_filters=filters,
@@ -28,7 +30,10 @@ def final_project():
         pooling_size=pooling,
         kernel_size=kernel,
         num_folds=folds,
-        num_epochs=epochs)
+        num_epochs=epochs,
+        img_dimension=img_dim)
 
+    #compile the CNN
     cnn.compile()
+    # train with cross validation
     cnn.fit()

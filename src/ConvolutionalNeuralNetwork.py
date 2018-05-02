@@ -111,17 +111,16 @@ class ConvolutionalNeuralNetwork:
             ## add convolutional layer
             self.model.add(conv_layer)
 
-        # create pooling layer
-        pool_layer = Pooling2D(
-            pool_size=(self.pooling_size, self.pooling_size))
-        # add the layers to the model
-        self.model.add(pool_layer)
+            # create pooling layer
+            pool_layer = Pooling2D(
+                pool_size=(self.pooling_size, self.pooling_size))
+            # add the layers to the model
+            self.model.add(pool_layer)
+
         # add flattening layer
         flat = Flatten()
         self.model.add(flat)
         # add the dense layer
-        dense = Dense(128, activation="relu")
-        self.model.add(dense)
         output = Dense(self.num_classes, activation="softmax")
         self.model.add(output)
         # compile model
