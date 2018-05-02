@@ -121,6 +121,8 @@ class ConvolutionalNeuralNetwork:
         flat = Flatten()
         self.model.add(flat)
         # add the dense layer
+        dense = Dense(, activation="relu")
+        self.model.add(dense)
         output = Dense(self.num_classes, activation="softmax")
         self.model.add(output)
         # compile model
