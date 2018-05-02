@@ -4,9 +4,11 @@ import logging
 import numpy as np
 import cv2
 
+from keras.applications.imagenet_utils import preprocess_input
 from keras.utils import to_categorical
 from keras.models import Sequential as Model
 from keras.layers import Convolution2D, MaxPooling2D as Pooling2D, Flatten, Dense
+from keras.optimizers import SGD
 
 # define default values
 POOLING_SIZE = 2
@@ -126,8 +128,9 @@ class ConvolutionalNeuralNetwork:
         output = Dense(self.num_classes, activation="softmax")
         self.model.add(output)
         # compile model
+        opt = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
         self.model.compile(
-            optimizer='adam',
+            optimizer=opt,
             loss='categorical_crossentropy',
             metrics=["accuracy"])
 
@@ -253,7 +256,7 @@ class ConvolutionalNeuralNetwork:
                     self.img_dimension, self.img_dimension, fname))
                 invalid_images.append(i)
             else:
-                data[i] = img
+                data[i] = preprocess_input(img.astype(np.float32), mode="tf")
 
         data = np.delete(data, invalid_images, axis=0)
         classes = self.get_class_labels(array, invalid_images)
