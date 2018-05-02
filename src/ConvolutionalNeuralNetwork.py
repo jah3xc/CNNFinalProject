@@ -194,7 +194,7 @@ class ConvolutionalNeuralNetwork:
 
         total = 0.
         for score in self.cross_validation_accuracy:
-            total += float(score)
+            total += float(self.cross_validation_accuracy[score])
         self.average_accuracy = total / self.num_folds
         print("Average Accuracy: {}".format(self.average_accuracy))
 
