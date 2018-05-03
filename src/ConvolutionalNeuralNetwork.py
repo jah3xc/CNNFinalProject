@@ -138,15 +138,14 @@ class ConvolutionalNeuralNetwork:
         """
         Fit the model with cross validation
         """
-        if self.model is None:
-            logging.critical(
-                "Cannot fit without model! Please call the compile() function first!"
-            )
-            return
 
         # for each fold
-        for fold in self.folds:
+        for fold in [chr(i) for i in range(65, 65 + self.num_folds)]:
+
             logging.info("Training Fold {}".format(fold))
+            # create fresh model
+            del self.model
+            self.compile()
             # genearate filelist for training this fold
             training_files = []
             for f in self.folds:
