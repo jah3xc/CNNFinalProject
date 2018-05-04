@@ -1,22 +1,25 @@
 from keras.models import Sequential, Model
 from keras.applications.resnet50 import ResNet50
 from keras.applications.xception import Xception
-from keras.optimizers import SGD
+from util.util import optimizer, loss, generate_folds, NUM_EPOCHS, NUM_FOLDS, IMG_DIMENSION
 
 
 class DeepCNN:
     def __init__(self,
                  dirname,
-                 img_size=256,
+                 img_size=IMG_DIMENSION,
                  residual=False,
-                 num_epochs=20,
-                 num_folds=5):
+                 num_epochs=NUM_EPOCHS,
+                 num_folds=NUM_FOLDS):
         self.dirname = dirname
         self.residual = residual
         self.img_size = img_size
         self.num_classes = 0
         self.num_epochs = num_epochs
         self.num_folds = num_folds
+
+        # get the folds
+        self.folds = generate_folds(self.dirname, self.num_folds)
 
         # find the number of classes
         all_files = Path(self.dirname).glob("*")
@@ -49,10 +52,9 @@ class DeepCNN:
         self.model = Model(
             inputs=stock_model.input, outputs=top_model(stock_model.output))
 
-        opt = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
         self.model.compile(
-            loss='categorical_crossentropy',
-            optimizer=opt,
+            loss=loss()
+            optimizer=optimizer(),
             metrics=['accuracy'])
 
     def fit(self):

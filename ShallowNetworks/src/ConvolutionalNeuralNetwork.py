@@ -8,16 +8,9 @@ from keras.applications.imagenet_utils import preprocess_input
 from keras.utils import to_categorical
 from keras.models import Sequential as Model
 from keras.layers import Convolution2D, MaxPooling2D as Pooling2D, Flatten, Dense
-from keras.optimizers import SGD
+from util.util import optimizer, loss, generate_train_data, generate_folds, POOLING_SIZE, KERNEL_SIZE, NUM_FILTERS, NUM_LAYERS, NUM_FOLDS, NUM_EPOCHS, IMG_DIMENSION
 
-# define default values
-POOLING_SIZE = 2
-KERNEL_SIZE = 3
-NUM_FILTERS = 32
-NUM_LAYERS = 2
-NUM_FOLDS = 5
-NUM_EPOCHS = 10
-IMG_DIMENSION = 256
+
 
 
 class ConvolutionalNeuralNetwork:
@@ -59,27 +52,7 @@ class ConvolutionalNeuralNetwork:
             logging.critical("{} does not exist!".format(dirname))
 
         # generate folds
-
-        files = Path(self.dirname).rglob("*")
-        # for each file
-        for i, f in enumerate(files):
-            # get the fold num
-            fold_num = i % num_folds
-            # switch from int to char
-            fold_letter = chr(65 + fold_num)
-            # insert if not present
-            if fold_letter not in self.folds:
-                self.folds[fold_letter] = []
-            # check that we have a valid extension
-            if str(f).split(".")[-1] not in ["png", "tif", "jpg"
-                                             ] or not Path(f).is_file():
-                logging.info(
-                    "Found file {}, which is not an image. Skipping..".format(
-                        str(f)))
-                continue
-
-            # append file to correct fold
-            self.folds[fold_letter].append(str(f))
+        self.folds = generate_folds(self.dirname, self.num_folds)
 
         # find the number of classes
         all_files = Path(self.dirname).glob("*")
@@ -128,10 +101,10 @@ class ConvolutionalNeuralNetwork:
         output = Dense(self.num_classes, activation="softmax")
         self.model.add(output)
         # compile model
-        opt = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+        
         self.model.compile(
-            optimizer=opt,
-            loss='categorical_crossentropy',
+            optimizer=optimizer()
+            loss=loss()
             metrics=["accuracy"])
 
     def fit(self):
@@ -156,7 +129,7 @@ class ConvolutionalNeuralNetwork:
                 item for sublist in training_files for item in sublist
             ]
             # generate the training data
-            data, classes = self.generate_train_data(training_files)
+            data, classes = generate_train_data(training_files, self.img_dimension)
             # sanity check
             if len(data) != len(classes):
                 logging.critical(
@@ -175,8 +148,8 @@ class ConvolutionalNeuralNetwork:
                 return
 
             # test the model
-            test_data, test_classes = self.generate_train_data(
-                self.folds[fold])
+            test_data, test_classes = generate_train_data(
+                self.folds[fold], self.img_dimension)
             # sanity check
             if len(test_data) != len(test_classes):
                 logging.critical(
@@ -201,63 +174,4 @@ class ConvolutionalNeuralNetwork:
         self.average_accuracy = total / self.num_folds
         print("Average Accuracy: {}".format(self.average_accuracy))
 
-    def get_class_labels(self, array, invalid_images):
-        """
-        Generate array of class labels from an
-        array of image paths
-        """
-
-        # init
-        data = []
-
-        # foreach file
-        for file in array:
-            # get the class
-            c = str(file).split("/")[-2]
-            # save it
-            data.append(c)
-
-        # switch from str to int
-        numerical_labels = []
-        # map the string to the number
-        label_map = {}
-        # the next number used
-        max_num = 0
-        # for each label
-        for label in data:
-            # check if we have a label in the map
-            if label not in label_map:
-                label_map[label] = max_num
-                max_num += 1
-            # append the numerical label
-            numerical_labels.append(label_map[label])
-        # delete invalid ones
-        numerical_labels = np.delete(numerical_labels, invalid_images)
-        # one hot encode
-        return to_categorical(numerical_labels)
-
-    def generate_train_data(self, array):
-        """
-        Convert an array of images to a
-        numpy array for training
-        """
-        #create data
-        data = np.empty((len(array), self.img_dimension, self.img_dimension,
-                         3))
-        # foreach image
-        invalid_images = []
-        for i, fname in enumerate(array):
-            # read image
-            img = cv2.imread(str(fname), cv2.IMREAD_COLOR)
-            if img.shape != (self.img_dimension, self.img_dimension, 3):
-
-                logging.info("Found image that was not {}x{}: {}".format(
-                    self.img_dimension, self.img_dimension, fname))
-                invalid_images.append(i)
-            else:
-                data[i] = preprocess_input(img.astype(np.float32), mode="tf")
-
-        data = np.delete(data, invalid_images, axis=0)
-        classes = self.get_class_labels(array, invalid_images)
-        # return
-        return data, classes
+    
