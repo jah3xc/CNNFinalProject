@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 import logging
 from pathlib import Path
-from src.ConvolutionalNeuralNetwork import POOLING_SIZE, KERNEL_SIZE, NUM_FILTERS, NUM_LAYERS, NUM_FOLDS, NUM_EPOCHS, IMG_DIMENSION
+from ShallowNetworks.src.ConvolutionalNeuralNetwork import POOLING_SIZE, KERNEL_SIZE, NUM_FILTERS, NUM_LAYERS, NUM_FOLDS, NUM_EPOCHS, IMG_DIMENSION
 
 
 def setup():
@@ -60,5 +60,6 @@ def setup():
 
     if args["num_folds"] < 2:
         logging.critical("There must be 2 or more folds!")
+        exit(1)
 
     return args

@@ -1,11 +1,11 @@
 import os
-from src.setup import setup
-from src.ConvolutionalNeuralNetwork import ConvolutionalNeuralNetwork as CNN
+from ShallowNetworks.src.setup import setup
+from ShallowNetworks.src.ConvolutionalNeuralNetwork import ConvolutionalNeuralNetwork as CNN
 import pathlib
 import logging
 
 
-def final_project():
+def run():
     """
     Run the final project
     """
