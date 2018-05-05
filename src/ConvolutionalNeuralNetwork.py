@@ -234,7 +234,8 @@ class ConvolutionalNeuralNetwork:
 
             # fit the model
             try:
-                self.model.fit(data, classes, epochs=self.num_epochs)
+                self.model.fit(
+                    data, classes, batch_size=16, epochs=self.num_epochs)
             except Exception as err:
                 logging.critical("Could not train! An error occurred")
                 logging.debug(err)
