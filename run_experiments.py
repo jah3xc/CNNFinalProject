@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 
 datasets = {
-    "test": str(Path("./test").absolute())
+    "test": str(Path("./test").absolute()),
     "UCMerced": str(Path("../UCMerced_Original").absolute())
 }
 img_size = 256
@@ -27,7 +27,7 @@ results = {
 }
 
 for dataset in datasets:
-    
+
     for num_epochs in np.arange(10, 60, 10):
 
         ################
