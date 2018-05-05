@@ -15,6 +15,8 @@ def run():
     residual = args["residual"]
 
     deep_cnn = DeepCNN(directory, img_size=img, residual=residual)
+    deep_cnn.compile()
+    deep_cnn.fit()
 
 
 def setup():
