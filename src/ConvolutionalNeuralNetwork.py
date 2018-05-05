@@ -30,7 +30,7 @@ def run():
     img_dim = args["img_dimension"]
 
     # create CNN
-    cnn = CNN(
+    cnn = ConvolutionalNeuralNetwork(
         image_location,
         num_filters=filters,
         num_layers=layers,
