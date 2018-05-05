@@ -32,7 +32,8 @@ for dataset in datasets:
         ################
         # Shallow CNN
         ###############
-        cnn = ConvolutionalNeuralNetwork(
+        print("Running ShallowCNN on {}".format(dataset))
+        cnn = ShallowCNN(
             datasets[dataset],
             num_layers=layers,
             num_folds=folds,
@@ -45,6 +46,7 @@ for dataset in datasets:
         ################
         # DEEP CNN
         ###############
+        print("Running DeepCNN on {}".format(dataset))
         deep_cnn = DeepCNN(
             datasets[dataset],
             img_size=img_size,
@@ -58,6 +60,7 @@ for dataset in datasets:
         ################
         # DEEP RNN
         ###############
+        print("Running DeepRNN on {}".format(dataset))
         deep_rnn = DeepCNN(
             datasets[dataset],
             img_size=img_size,
