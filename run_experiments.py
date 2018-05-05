@@ -80,16 +80,13 @@ for dataset in datasets:
         del deep_cnn
         del deep_rnn
 
-#########
-# Write out Results
-#########
-with open("experiment_results.csv", "w") as file:
-    for d in datasets:
-        file.write("\n\n\n")
-        file.write("{} Dataset\n".format(d))
+    #########
+    # Write out Results
+    #########
+    with open("experiment_results_{}.csv".format(dataset), "w") as file:
         file.write("Network, 10, 20, 30, 40, 50\n")
         for network in results:
             line = network + ","
-            for score in results[network][d]:
+            for score in results[network][dataset]:
                 line += str(score) + ","
             file.write(line + "\n")
