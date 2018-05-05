@@ -126,6 +126,6 @@ def generate_train_data(filenames, img_size):
             data[i] = preprocess_input(img.astype(np.float32), mode="tf")
 
     data = np.delete(data, invalid_images, axis=0)
-    classes = get_class_labels(array, invalid_images)
+    classes = get_class_labels(filenames, invalid_images)
     # return
     return data, classes
