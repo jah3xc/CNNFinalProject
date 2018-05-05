@@ -3,14 +3,108 @@ import os
 import logging
 import numpy as np
 import cv2
+from argparse import ArgumentParser
 
 from keras.applications.imagenet_utils import preprocess_input
 from keras.utils import to_categorical
 from keras.models import Sequential as Model
 from keras.layers import Convolution2D, MaxPooling2D as Pooling2D, Flatten, Dense
-from util.util import optimizer, loss, generate_train_data, generate_folds, POOLING_SIZE, KERNEL_SIZE, NUM_FILTERS, NUM_LAYERS, NUM_FOLDS, NUM_EPOCHS, IMG_DIMENSION
+from src.util import optimizer, loss, generate_train_data, generate_folds, POOLING_SIZE, KERNEL_SIZE, NUM_FILTERS, NUM_LAYERS, NUM_FOLDS, NUM_EPOCHS, IMG_DIMENSION
 
 
+def run():
+    """
+    Run the final project
+    """
+
+    # get args
+    args = setup()
+    # parse args
+    image_location = args["image_directory"]
+    filters = args["num_filters"]
+    kernel = args["kernel_size"]
+    pooling = args["pooling_size"]
+    layers = args["num_layers"]
+    folds = args["num_folds"]
+    epochs = args["num_epochs"]
+    img_dim = args["img_dimension"]
+
+    # create CNN
+    cnn = CNN(
+        image_location,
+        num_filters=filters,
+        num_layers=layers,
+        pooling_size=pooling,
+        kernel_size=kernel,
+        num_folds=folds,
+        num_epochs=epochs,
+        img_dimension=img_dim)
+
+    #compile the CNN
+    cnn.compile()
+    # train with cross validation
+    cnn.fit()
+
+
+def setup():
+    """
+    Setup for running the project
+    :return: Parsed Arguments
+    """
+    parser = ArgumentParser()
+    parser.add_argument("image_directory", type=str, help="Location of images")
+    parser.add_argument(
+        "--pooling_size",
+        type=int,
+        help="The pooling window size",
+        default=POOLING_SIZE)
+    parser.add_argument(
+        "--kernel_size",
+        type=int,
+        help="The kernel window size",
+        default=KERNEL_SIZE)
+    parser.add_argument(
+        "--num_filters",
+        type=int,
+        help="The number of convolutional filters",
+        default=NUM_FILTERS)
+    parser.add_argument(
+        "--num_layers",
+        type=int,
+        help="Number of convolutional layers",
+        default=NUM_LAYERS)
+    parser.add_argument(
+        "--num_folds",
+        type=int,
+        help="Number of folds for cross validation",
+        default=NUM_FOLDS)
+    parser.add_argument(
+        "--num_epochs", type=int, default=NUM_EPOCHS, help="Number of epochs")
+    parser.add_argument(
+        "--img_dimension",
+        type=int,
+        default=IMG_DIMENSION,
+        help="Size of images")
+    parser.add_argument(
+        "--log",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        default="WARNING",
+        help="Logging level")
+    args = vars(parser.parse_args())
+
+    # extract logging
+    logging.basicConfig(level=args["log"])
+
+    # make sure imgpath exists
+    if not Path(args["image_directory"]).is_dir():
+        logging.critical("Image Directory does not exist!")
+        exit(1)
+
+    if args["num_folds"] < 2:
+        logging.critical("There must be 2 or more folds!")
+        exit(1)
+
+    return args
 
 
 class ConvolutionalNeuralNetwork:
@@ -101,11 +195,9 @@ class ConvolutionalNeuralNetwork:
         output = Dense(self.num_classes, activation="softmax")
         self.model.add(output)
         # compile model
-        
+
         self.model.compile(
-            optimizer=optimizer()
-            loss=loss()
-            metrics=["accuracy"])
+            optimizer=optimizer(), loss=loss(), metrics=["accuracy"])
 
     def fit(self):
         """
@@ -129,7 +221,8 @@ class ConvolutionalNeuralNetwork:
                 item for sublist in training_files for item in sublist
             ]
             # generate the training data
-            data, classes = generate_train_data(training_files, self.img_dimension)
+            data, classes = generate_train_data(training_files,
+                                                self.img_dimension)
             # sanity check
             if len(data) != len(classes):
                 logging.critical(
@@ -173,5 +266,3 @@ class ConvolutionalNeuralNetwork:
             total += float(self.cross_validation_accuracy[score])
         self.average_accuracy = total / self.num_folds
         print("Average Accuracy: {}".format(self.average_accuracy))
-
-    
