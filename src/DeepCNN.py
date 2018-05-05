@@ -36,15 +36,16 @@ def setup():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("dirname", type=str, help="Directory of images")
-    parser.add_argument("--img_size", type=int, default=299, help="Image size")
+    parser.add_argument(
+        "--img_size", type=int, default=IMG_DIMENSION, help="Image size")
     parser.add_argument("--residual", action="store_true", help="CNN or RNN")
     parser.add_argument(
         "--num_folds",
         type=int,
         help="Number of folds for cross validation",
-        default=5)
+        default=NUM_FOLDS)
     parser.add_argument(
-        "--num_epochs", type=int, default=20, help="Number of epochs")
+        "--num_epochs", type=int, default=NUM_EPOCHS, help="Number of epochs")
     parser.add_argument(
         "--log",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
