@@ -3,6 +3,7 @@ import logging
 from pathlib import Path
 
 from keras.models import Sequential, Model
+from keras.layers import Dense
 from keras.applications.resnet50 import ResNet50
 from keras.applications.xception import Xception
 from src.util import optimizer, loss, generate_folds, NUM_EPOCHS, NUM_FOLDS, IMG_DIMENSION
