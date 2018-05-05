@@ -5,7 +5,7 @@ from pathlib import Path
 
 datasets = {
     "test": str(Path("./test").absolute())
-    # "UCMerced": str(Path("../UCMerced_Original").absolute())
+    "UCMerced": str(Path("../UCMerced_Original").absolute())
 }
 img_size = 256
 folds = 5
@@ -27,12 +27,14 @@ results = {
 }
 
 for dataset in datasets:
-    for num_epochs in [1]:
+    
+    for num_epochs in np.arange(10, 60, 10):
 
         ################
         # Shallow CNN
         ###############
-        print("Running ShallowCNN on {}".format(dataset))
+        print("Running ShallowCNN on {} for {} epochs".format(
+            dataset, num_epochs))
         cnn = ShallowCNN(
             datasets[dataset],
             num_layers=layers,
@@ -46,7 +48,7 @@ for dataset in datasets:
         ################
         # DEEP CNN
         ###############
-        print("Running DeepCNN on {}".format(dataset))
+        print("Running DCNN on {} for {} epochs".format(dataset, num_epochs))
         deep_cnn = DeepCNN(
             datasets[dataset],
             img_size=img_size,
@@ -60,7 +62,7 @@ for dataset in datasets:
         ################
         # DEEP RNN
         ###############
-        print("Running DeepRNN on {}".format(dataset))
+        print("Running DRNN on {} for {} epochs".format(dataset, num_epochs))
         deep_rnn = DeepCNN(
             datasets[dataset],
             img_size=img_size,
@@ -83,10 +85,11 @@ for dataset in datasets:
 #########
 with open("experiment_results.csv", "w") as file:
     for d in datasets:
+        file.write("\n\n\n")
         file.write("{} Dataset\n".format(d))
         file.write("Network, 10, 20, 30, 40, 50\n")
         for network in results:
-            line = network
+            line = network + ","
             for score in results[network][d]:
                 line += str(score) + ","
             file.write(line + "\n")
