@@ -1,5 +1,6 @@
 from keras.optimizers import SGD
 from keras.applications.imagenet_utils import preprocess_input
+from keras.utils import to_categorical
 import numpy as np
 import cv2
 import logging
