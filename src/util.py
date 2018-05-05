@@ -48,7 +48,7 @@ def generate_folds(dirname, num_folds):
         # switch from int to char
         fold_letter = chr(65 + fold_num)
         # insert if not present
-        if fold_letter not in self.folds:
+        if fold_letter not in folds:
             folds[fold_letter] = []
         # check that we have a valid extension
         if str(f).split(".")[-1] not in ["png", "tif", "jpg"
