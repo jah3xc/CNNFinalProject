@@ -14,8 +14,15 @@ def run():
     directory = args["dirname"]
     img = args["img_size"]
     residual = args["residual"]
+    folds = args["num_folds"]
+    epochs = args["num_epochs"]
 
-    deep_cnn = DeepCNN(directory, img_size=img, residual=residual)
+    deep_cnn = DeepCNN(
+        directory,
+        img_size=img,
+        residual=residual,
+        num_epochs=epochs,
+        num_folds=folds)
     deep_cnn.compile()
     deep_cnn.fit()
 
