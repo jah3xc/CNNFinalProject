@@ -5,7 +5,7 @@ from pathlib import Path
 from keras.models import Sequential, Model
 from keras.layers import Dense
 from keras.applications.resnet50 import ResNet50
-from keras.applications.xception import Xception
+from keras.applications.vgg19 import VGG19
 from src.util import optimizer, loss, generate_folds, generate_train_data, NUM_EPOCHS, NUM_FOLDS, IMG_DIMENSION
 
 
@@ -104,7 +104,7 @@ class DeepCNN:
                 input_shape=(self.img_size, self.img_size, 3),
                 pooling='max')
         else:
-            stock_model = Xception(
+            stock_model = VGG19(
                 include_top=False,
                 input_shape=(self.img_size, self.img_size, 3),
                 pooling='max')
