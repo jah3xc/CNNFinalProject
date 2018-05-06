@@ -63,8 +63,15 @@ The architecture of the network has a total of 12 layers. The first 10 layers ar
 		
 		\subsection{Deep Convolutional Neural Network}
 		
-The Deep Convolutional Neural Network used for comparison in this project is VGG 19 \cite{vgg}. The VGG 19 network, as the name suggests, has 19 total layers. This count, however, does not include the pooling layers. The basic architecture can been seen in \Cref{fig:deep_cnn}. There are 16 convolutional layers and 4 pooling layers. The final pooling layer is then connected to 3 fully connected layers, the last of which is a softmax layer for classification. 
+The Deep Convolutional Neural Network used for comparison in this project is VGG 19 \cite{vgg}. The VGG 19 network, as the name suggests, has 19 total layers. This count, however, does not include the pooling layers. The basic architecture can been seen in \Cref{fig:deep_cnn}. 
+
+VGG19 has 16 convolutional layers and 4 pooling layers. The interesting quality about VGG19 is that the final pooling layer does not connect directly to the softmax output layer. Instead, the final pooling layer is a 3-layer multilayer perceptron (MLP) \cite{ci_book} The final layer of this MLP is a softmax layer for classification. 
+
 		\subsection{Deep Residual Convolutional Neural Network}
+
+The final neural network used for comparison in this project is a Deep Residual Convolutional Neural Network (DRNN). I chose to use ResNet-50 \cite{resnet50}, a standard DRNN for comparison developed by Microsoft Research. The architecture of this network can be seen in \Cref{fig:deep_rnn}.
+
+ResNet-50 begins with a single convolutional layer, followed by a single pooling layer, followed by 49 convolutional layers that are residual, meaning that there is a connection from layer \textit{N} to both layer \textit{N+1} as well as layer \textit{N+2}. This connection exists so that the error from the two connections to the \textit{N+2} layer can be summed when performing backpropagation, thus slowing the disappearance of the gradient. The disappearing gradient is one of the greatest challenges of using the gradient descent method. 
 	
 	\section{Algorithm Design}
 	
@@ -75,7 +82,9 @@ The Deep Convolutional Neural Network used for comparison in this project is VGG
 	\section{Code}
 	
 	
-
+%%%%%%%%%%%%%%%%
+%		 REFERENCES
+%%%%%%%%%%%%%%%%%
 	\newpage
 	\bibliography{bibliography} 
 	\bibliographystyle{ieeetr}
