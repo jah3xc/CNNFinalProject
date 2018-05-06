@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+/doc/final_project_report.bbl
+/doc/final_project_report.aux
+/doc/final_project_report.blg
+/doc/final_project_report.synctex.gz
+/.vscode/tags
