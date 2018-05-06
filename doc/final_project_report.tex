@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[12pt]{article}
 \title{Comparison of Convolutional Neural Networks for Remote Sensing}
 \date{2018-05-09}
 \author{James Hurt}
@@ -7,6 +7,7 @@
 \usepackage{subcaption}
 \usepackage{cleveref}
 \usepackage{indentfirst}
+\usepackage{amsmath}
 \begin{document}
 	\pagenumbering{arabic}
 	
@@ -92,6 +93,24 @@ I chose to use 2 datasets because I felt that using only one would not give me e
 I also chose to have a small and large dataset, because there are many instances of binary classification needed in everyday life, so looking at a 3 class problem as well as a large, 21 class problem, would allow me to see if one method was better for large but not small or vice versa. If I found that the shallow could better handle the 3 class problem or maybe if the shallow CNN was within 1\% cross validation accuracy, for example, then I could say that binary classifiers could settle for a shallow CNN, thus relieving the long training times required for Deep CNN or RNN. 
 
 	\subsection{Parameter Selection}
+After choosing the datasets to use, I had to decide on the parameters for the algorithms. The choices I had to make specifically were the loss function and the optimizer. I needed to choose one of each that would be used in all 3 algorithms. I had to use the same one to ensure a fair comparison. 
+
+The loss function I decided to use was \textbf{categorical crossentropy} \cite{cross_entropy}: 
+		
+\[
+		H(q,p) =  \int q(x) log(q(x) / p(x)) \mathrm{d}x
+\]
+
+Crossentropy, as discussed in the first Computational Intelligence class, is a useful loss function because it harshly punishes output that is very far from the correct value. It is more punishing than standard error and can help a network converge in less epochs. 
+
+For the optimizer, I started with knowledge of gradient descent from the previous Computational Intelligence class, and decided to choose a similar optimizer for my CNN, \textbf{Stochastic Gradient Descent} \cite{sgd}:
+
+\[
+	w(t+1) = w(t) - \eta \frac{\partial}{\partial w} \ell(f(x_t), y_t)
+\]
+
+The idea of this optimizer is the same as gradient descent in that we are attempting to move the opposite direction of the error function in search of a set of parameters such that there exists a global minimum for error.
+
 	\subsection{Comparison Algorithm}
 
 
