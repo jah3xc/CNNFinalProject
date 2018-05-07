@@ -8,6 +8,8 @@
 \usepackage{cleveref}
 \usepackage{indentfirst}
 \usepackage{amsmath}
+\usepackage{siunitx} % Required for alignment
+
 \begin{document}
 	\pagenumbering{arabic}
 	
@@ -121,8 +123,46 @@ After I had the ability to perform cross validation experiments with 1 function 
 	
 	\section{Experiment Results}
 	
+	The experiments run were 5-fold cross validation on  both the test dataset and UCMerced for 10, 20, 30, 40, and 50 epochs on the ShallowCNN, Deep CNN (VGG19), and Deep RNN (ResNet-50)
 	\subsection{Test Dataset}
+
+	\begin{table}[h!]
+		\begin{center}
+			\caption{Average Cross Validation Accuracy for Test Dataset}
+			\label{table:test}
+			\begin{tabular}{l | S | S | S | S |  r}
+				\textbf{Method} & \textbf{10 Epochs} & \textbf{20 Epochs} & \textbf{30 Epochs} & \textbf{40 Epochs} & \textbf{50 Epochs} \\
+				\hline
+				Shallow CNN & 91.2\% & 92.5\% & 92.2\% & 89.7\% & 92.8\% \\
+				Deep CNN & 35.1\% & 33.1\% & 33.1\% & 57.7\% & 33.5\% \\
+				Deep RNN & 75.5\% & 94.5\% & 92.3\% & 97.3\% & 94.9\% \\
+				
+			
+			\end{tabular}					
+		
+		
+		\end{center}
+	
+	\end{table}
 	\subsection{UCMerced Dataset}
+	\begin{table}[h!]
+		\begin{center}
+			\caption{Average Cross Validation Accuracy for UCMerced Dataset}
+			\label{table:ucm}
+			\begin{tabular}{l | S | S | S | S |  r}
+				\textbf{Method} & \textbf{10 Epochs} & \textbf{20 Epochs} & \textbf{30 Epochs} & \textbf{40 Epochs} & \textbf{50 Epochs} \\
+				\hline
+				Shallow CNN & 38.9\% & 38.6\% & 35.3\% & 26.6\% & 33.2\% \\
+				Deep CNN & 17.9\% & 15.1\% & 18.6\% & 4.9\% & 53.1\% \\
+				Deep RNN & 94.8\% & 96.2\% & 96.2\% & 96.4\% & 97.8\% \\
+				
+			
+			\end{tabular}					
+		
+		
+		\end{center}
+	
+	\end{table}
 	
 	\section{Analysis}
 	
