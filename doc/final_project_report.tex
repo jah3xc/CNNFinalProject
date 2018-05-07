@@ -63,20 +63,20 @@ I chose to make my comparison of CNN for the application of Remote Sensing becau
 		
 The shallow convolutional neural network used in this project combines many techniques of fully connected networks previously used for pattern recognition. The architecture of the network can be see in \Cref{fig:shallow_cnn}.
 		
-The architecture of the network has a total of 12 layers. The first 10 layers are alternating 2D Convolutional layers layers with a 3x3 kernel size and 2D Max Pooling layers with a 2x2 Pooling Window. After these 10 layers, feature extraction is finished, and a flattening layer is introduced to put the data into a single vector for the final fully connected softmax layer. 
+The architecture of the network has a total of 12 layers. The first 10 layers are alternating 2D Convolutional layers with a 3x3 kernel size and 2D Max Pooling layers with a 2x2 Pooling Window. After these 10 layers, feature extraction is finished. I then added a flattening layer because the fully connected layer required a 1D vector as input. I then add the fully connected layer with a softmax activation function for classificaion.
 		
 		
 		\subsection{Deep Convolutional Neural Network}
 		
-The Deep Convolutional Neural Network used for comparison in this project is VGG 19 \cite{vgg}. The VGG 19 network, as the name suggests, has 19 total layers. This count, however, does not include the pooling layers. The basic architecture can been seen in \Cref{fig:deep_cnn}. 
+The Deep Convolutional Neural Network used for comparison in this project is VGG19 \cite{vgg}. The VGG19 network, as the name suggests, has 19 total layers. This count, however, does not include the pooling layers. The basic architecture can been seen in \Cref{fig:deep_cnn}. 
 
-VGG19 has 16 convolutional layers and 4 pooling layers. The interesting quality about VGG19 is that the final pooling layer does not connect directly to the softmax output layer. Instead, the final pooling layer is a 3-layer multilayer perceptron (MLP) \cite{ci_book} The final layer of this MLP is a softmax layer for classification. 
+VGG19 has 16 convolutional layers and 4 pooling layers. The interesting quality about VGG19 is that the final pooling layer does not connect directly to the softmax output layer. Instead, the final pooling layer's output if flattened and used an input for a 3-layer multilayer perceptron (MLP) \cite{ci_book} The final layer of this MLP is a softmax layer for classification. 
 
 		\subsection{Deep Residual Convolutional Neural Network}
 
 The final neural network used for comparison in this project is a Deep Residual Convolutional Neural Network (DRNN). I chose to use ResNet-50 \cite{resnet50}, a standard DRNN for comparison developed by Microsoft Research. The architecture of this network can be seen in \Cref{fig:deep_rnn}.
 
-ResNet-50 begins with a single convolutional layer, followed by a single pooling layer, followed by 49 convolutional layers that are residual, meaning that there is a connection from layer \textit{N} to both layer \textit{N+1} as well as layer \textit{N+2}. This connection exists so that the error from the two connections to the \textit{N+2} layer can be summed when performing backpropagation, thus slowing the disappearance of the gradient. The disappearing gradient is one of the greatest challenges of using the gradient descent method. 
+ResNet-50 begins with a single convolutional layer, followed by a single pooling layer. After the initial pooling layer, there are 49 convolutional layers that are \textit{residual}, meaning that there is a connection from layer \textit{N} to both layer \textit{N+1} as well as layer \textit{N+2}. This connection exists so that the error from the two connections to the \textit{N+2} layer can be summed when performing backpropagation, thus slowing the disappearance of the gradient. Deep RNN's have gained so much popularity due to this feature of relieving the disappearing gradient. This issue occurs when training deep networks because as weight vector approaches the minimum, the gradient is so small that there is not very much update to the weights, so the minimum may never be reached. By summing the error from several previous layers, the gradient disappear slower, allowing a more flexible and better performing network. 
 	
 	\section{Algorithm Design}
 	
@@ -170,12 +170,12 @@ After I had the ability to perform cross validation experiments with 1 function 
 	\centering
 		\begin{subfigure}[b]{0.4\linewidth}
 			\centering
-			\fbox{\includegraphics[scale=0.5]{img/test_dataset.png}}
+			\fbox{\includegraphics[width=0.93\linewidth]{img/test_dataset.png}}
 			\caption{Test Dataset}	
 		\end{subfigure}
 		\begin{subfigure}[b]{0.4\linewidth}
 			\centering
-			\fbox{\includegraphics[scale=0.5]{img/ucmerced.png}}
+			\fbox{\includegraphics[width=0.9\linewidth]{img/ucmerced.png}}
 			\caption{UCMerced Dataset}
 			\label{fig:ucm_trend}
 		\end{subfigure}
