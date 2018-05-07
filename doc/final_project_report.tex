@@ -193,15 +193,11 @@ After I had the ability to perform cross validation experiments with 1 function 
 	
 	In addition to understanding when Shallow CNN may prove to be the best choice, another conclusion that I made based on the results of these experiments was that when given the choice between a pure DCNN, or a Residual DCNN, always choose the Residual Network, with all things being equal. The DRNN consistently performed better than either of the other models, and more importantly, it was by far the most consistent and dependable model that I examined. The only experiment run for which the DRNN did not have > 90\% accuracy was with 10 epochs of training on the Test Dataset, which is remarkable. For all experiments with number of epochs greater than or equal to 20, accuracy for the DRNN on both large and small problems, was at least 92.3\%. The residual network was well worth the extra training for my problem because I was able to GPU accelerate, so the extra time to train was worth it for the boost from 33.2\% to 97.8\% for 50 epochs on UCMerced. 
 	
-	
-	% Talking points
-
-		% - overall conclusion: VGG19 is useless, use a deep RNN for complex and shallow CNN for simple if 92% is good enough -- else always choose RNN
-
+	In conclusion, when comparing 5-class cross validation classification accuracy for Shallow CNN, Deep CNN, and Deep RNN in a 3-class problem and 21-class problem, the Shallow CNN is best used for a small number of classes when resources or time are limited and perhaps when time to solution is worth a drop of ~10\% in performance. The Deep CNN did not perform well at all with the chosen parameters, but perhaps more experimentation with loss, optimizer, normalization, or length of training would lead to a jump in accuracy across 5-fold cross validation. The jump in training time for the Deep CNN did not prove to be wise, as in only 1 of the 10 experiments was the Deep CNN not the worst performing model. Finally, in cases where high accuracy is the most important and/or when there are sufficient resources for GPU acceleration, the Deep RNN is the safest and most reliable choice for Remote Sensing. While the hours of extra training only yielded ~5\% improvement of accuracy for the 3-class dataset, the Deep RNN is still the safest and most consistent choice for CNN within applications of Remote Sensing. 
 	
 	\section{Code}
 	
-	The code for this project can be seen in the \textbf{Code} folder. 
+	This project was developed using Python3 and has a high number of dependencies for running, including the Deep Learning libraries TensorFlow and Keras. Please note that training the Deep CNN or Deep RNN without GPU Acceleration will most likely take several hours. The code for this project can be seen in the \textbf{Code} folder. Please see the \textit{README.md} file within that folder for instructions on how to run the project.  
 	
 	
 %%%%%%%%%%%%%%%%
